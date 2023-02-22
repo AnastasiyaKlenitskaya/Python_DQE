@@ -10,11 +10,17 @@
 # got 87.
 
 
-string_value = 'homEwork:\n  tHis iz your homeWork, copy these Text to variable.\n\n  You NEED TO normalize it fROM ' \
-               'letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING ' \
-               'SENtence and add it to the END OF this Paragraph.\n\n  it iZ misspeLLing here. fix“iZ” with correct ' \
-               '“is”, but ONLY when it Iz a mistAKE.\n\n  last iz TO calculate nuMber OF Whitespace characteRS' \
-               ' in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.' \
+string_value = """  
+homEwork:
+    tHis iz your homeWork, copy these Text to variable.
+
+    You NEED TO normalize it fROM letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
+
+    it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE.
+
+    last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.
+
+"""
 
 counter = 0     # variable to count whitespaces
 list_of_last_words = []     # variable to keep list of last words in sentences
@@ -63,9 +69,9 @@ string_value = string_value.replace(' iz ', ' is ')
 
 # calculating whitespaces in the string - it's 96 (instead of 87 as in task), I suppose issue is in the provided sting
 # value and tab's instead of double spaces
-for x in range(len(string_value)):
-    if string_value[x].isspace():       # if selected element is whitespace ( ' ', '\n', '\t', '\f', '\r', '\v')
+for x in string_value:
+    if x.isspace():       # if selected element is whitespace ( ' ', '\n', '\t', '\f', '\r', '\v')
         counter += 1                    # increase counter for 1
 
 print(string_value)                     # print to the console changed version of the text
-print("Number of whitespace charsacters in this text = ", counter)     # print to the console counter of the whitespaces
+print("Number of whitespace characters in this text = ", counter)     # print to the console counter of the whitespaces
