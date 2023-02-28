@@ -10,17 +10,11 @@
 # got 87.
 
 
-string_value = """  
-homEwork:
-    tHis iz your homeWork, copy these Text to variable.
-
-    You NEED TO normalize it fROM letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
-
-    it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE.
-
-    last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.
-
-"""
+string_value = 'homEwork:\n  tHis iz your homeWork, copy these Text to variable.\n\n  You NEED TO normalize it fROM ' \
+               'letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING ' \
+               'SENtence and add it to the END OF this Paragraph.\n\n  it iZ misspeLLing here. fix“iZ” with correct ' \
+               '“is”, but ONLY when it Iz a mistAKE.\n\n  last iz TO calculate nuMber OF Whitespace characteRS' \
+               ' in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.' \
 
 counter = 0     # variable to count whitespaces
 list_of_last_words = []     # variable to keep list of last words in sentences
@@ -60,7 +54,11 @@ for x in range(len(list_of_last_words)):
 new_string = new_string.capitalize()        # make first letter of the new string capital
 
 # adding new string to base one
-string_value = string_value[:238] + ' ' + new_string + string_value[238:len(string_value)]
+# string_value = string_value[:238] + ' ' + new_string + string_value[238:len(string_value)]
+
+substring_index = string_value.find('to the end of this paragraph.') + len('to the end of this paragraph.')
+if substring_index != -1:
+    string_value = string_value[:substring_index] + ' ' + new_string + string_value[substring_index:len(string_value)]
 
 # fixing 'iz' to 'is'
 # It was not specified to fix missing space in 'fix"iz"'
@@ -69,8 +67,8 @@ string_value = string_value.replace(' iz ', ' is ')
 
 # calculating whitespaces in the string - it's 96 (instead of 87 as in task), I suppose issue is in the provided sting
 # value and tab's instead of double spaces
-for x in string_value:
-    if x.isspace():       # if selected element is whitespace ( ' ', '\n', '\t', '\f', '\r', '\v')
+for x in range(len(string_value)):
+    if string_value[x].isspace():       # if selected element is whitespace ( ' ', '\n', '\t', '\f', '\r', '\v')
         counter += 1                    # increase counter for 1
 
 print(string_value)                     # print to the console changed version of the text
