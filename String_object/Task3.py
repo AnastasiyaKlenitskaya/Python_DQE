@@ -10,11 +10,17 @@
 # got 87.
 
 
-string_value = 'homEwork:\n  tHis iz your homeWork, copy these Text to variable.\n\n  You NEED TO normalize it fROM ' \
-               'letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING ' \
-               'SENtence and add it to the END OF this Paragraph.\n\n  it iZ misspeLLing here. fix“iZ” with correct ' \
-               '“is”, but ONLY when it Iz a mistAKE.\n\n  last iz TO calculate nuMber OF Whitespace characteRS' \
-               ' in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.' \
+string_value = """  
+homEwork:
+    tHis iz your homeWork, copy these Text to variable.
+
+    You NEED TO normalize it fROM letter CASEs point oF View. also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
+
+    it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE.
+
+    last iz TO calculate nuMber OF Whitespace characteRS in this Tex. caREFULL, not only Spaces, but ALL whitespaces. I got 87.
+
+"""
 
 counter = 0     # variable to count whitespaces
 list_of_last_words = []     # variable to keep list of last words in sentences
@@ -38,10 +44,7 @@ for x in range(len(string_value) - 2):
 # detecting last words in each string
 for x in range(len(split_string)):
     if split_string[x][len(split_string[x]) - 1] == '.':    # check if split word contains dot at the end
-        if split_string[x][:len(split_string[x]) - 1].isalpha():  # check is the last split word consist of words
-            list_of_last_words.append(split_string[x][:len(split_string[x]) - 1])   # adding word to list
-        else:   # else - split word contains symbols instead of letters
-            list_of_last_words.append(split_string[x - 1][:len(split_string[x])])   # adding previous word to the list
+        list_of_last_words.append(split_string[x][:len(split_string[x]) - 1])   # adding word to list
 
 
 # creating new string with last words of each sentence
@@ -67,9 +70,9 @@ string_value = string_value.replace(' iz ', ' is ')
 
 # calculating whitespaces in the string - it's 96 (instead of 87 as in task), I suppose issue is in the provided sting
 # value and tab's instead of double spaces
-for x in range(len(string_value)):
-    if string_value[x].isspace():       # if selected element is whitespace ( ' ', '\n', '\t', '\f', '\r', '\v')
-        counter += 1                    # increase counter for 1
+for char in string_value:  # loop to go threw all the chars in provided string
+    if char.isspace():  # if char is a whitespace
+        counter += 1  # increase the counter
 
 print(string_value)                     # print to the console changed version of the text
 print("Number of whitespace characters in this text = ", counter)     # print to the console counter of the whitespaces
