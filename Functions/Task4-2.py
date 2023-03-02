@@ -17,17 +17,17 @@ def string_normalizing(current_string: str) -> str:
         if flag and current_string[x].isalpha():                # if flag is true and selected letter is alphabetic
             # changing case of selected char
             current_string = current_string[0:x] + current_string[x].swapcase() + current_string[
-                                                                                  x + 1: len(current_string)]
+                                                                          x + 1: len(current_string)]
             flag = False        # changing flag value
         if current_string[x] in ['.', '\n', '\t']:      # if observed char is dot, new string or tabulation
             flag = True         # changing flag value
     return current_string       # returning changed string
 
 
-# Function to get last words of all sentenses in provided string
+# Function to get last words of all sentences in provided string
 def get_last_words_of_the_sentences(current_string: str) -> list:
     list_of_the_last_words = []     # initialization of the list to keep last words
-    split_string = current_string.split()   # spliting provided string for words
+    split_string = current_string.split()   # split provided string for words
 
     for x in range(len(split_string)):      # loop to go threw all words
         if split_string[x][len(split_string[x]) - 1] == '.':  # check if split word contains dot at the end
@@ -36,7 +36,7 @@ def get_last_words_of_the_sentences(current_string: str) -> list:
     return list_of_the_last_words       # return list of the last words in the text
 
 
-# Funtion to create sentence from the last words in the text
+# Function to create sentence from the last words in the text
 def create_sentence_of_the_last_words(current_string: str) -> str:
     list_of_the_last_words = get_last_words_of_the_sentences(current_string)    # initialization list variable with
     # last words of the provided string
@@ -51,8 +51,15 @@ def create_sentence_of_the_last_words(current_string: str) -> str:
     return sentence             # return created sentence
 
 
-# Function to add the substing to the string
-def add_substring_to_the_string(current_string: str, position=243) -> str:
+# Function to get end position of the substring in the provided string
+def get_end_position_of_the_substring_in_the_string(substring: str, string:str) -> int:
+    substring_index = string.find(substring) + len(substring)
+    return substring_index
+
+
+# Function to add the substring to the string
+def add_substring_to_the_string(current_string: str) -> str:
+    position = get_end_position_of_the_substring_in_the_string('to the end of this paragraph.', current_string)
     # return string with inserted substring
     return current_string[:position] + ' ' + create_sentence_of_the_last_words(current_string) + current_string[
                                                                                                  position:len(
@@ -90,13 +97,14 @@ homEwork:
 # function to reformat provided text
 def reformat_the_text(initial_string: str) -> str:
     reformatted_string = string_normalizing(initial_string)     # calling string_normalizing function to normalize text
-    reformatted_string = add_substring_to_the_string(reformatted_string) # calling function to add substring from the
+    reformatted_string = add_substring_to_the_string(reformatted_string)  # calling function to add substring from the
     # last words
-    reformatted_string = fix_substring_in_string(reformatted_string, 'iz', 'is') # calling function to fix iz to is
+    reformatted_string = fix_substring_in_string(reformatted_string, 'iz', 'is')  # calling function to fix iz to is
 
-    return reformatted_string       # return reformated text
+    return reformatted_string       # return reformatted text
 
 
 print(reformat_the_text(string_value))
-print("Number of whitespace characters in this text = ", calculating_whitespaces(string_value))  # print to the
-# console counter of the whitespaces
+# print to the console counter of the whitespaces for modified string
+print("Number of whitespace characters in modified text = ", calculating_whitespaces(reformat_the_text(string_value)))
+
