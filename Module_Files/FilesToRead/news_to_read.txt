@@ -1,0 +1,29 @@
+News -------------------------
+text from news_to_read.txt
+Krakow, 1-3-2023 19:41
+------------------------------
+
+Private Ad -------------------
+text from news_to_read.txt
+Actual until: 2023-03-08 7 days left
+------------------------------
+
+Weather forecast -------------
+text from news_to_read.txt
+Temperature is -1, Windy.
+------------------------------
+
+News -------------------------
+2 text from news_to_read.txt
+Krakow, 1-3-2023 19:41
+------------------------------
+
+Private Ad -------------------
+2 text from news_to_read.txt
+Actual until: 2023-03-08 7 days left
+------------------------------
+
+Weather forecast -------------
+2 text from news_to_read.txt
+Temperature is -1, Windy.
+------------------------------

@@ -51,7 +51,8 @@ class NewsGeneratorMenu:
         if len(news_city) == 0:  # if input was empty
             news_city = "Somewhere. Yes, just somewhere"  # put default value as a city
         # write generated news to file
-        self.file.write_to_file(News().generate_news_feed(news_body, news_city))
+        FileOperations.write_to_file(News().generate_news_feed(news_body, news_city))
+        # self.file.write_to_file(News().generate_news_feed(news_body, news_city))
         pass
 
     def private_ad_menu(self):
@@ -75,7 +76,8 @@ class NewsGeneratorMenu:
                 except ValueError:  # exception handler
                     print("Entered expiration date has wrong format. Please, try again.")  # print to console
         # write generated private ad to file
-        self.file.write_to_file(PrivateAd().generate_private_ad(ad_text, ad_expiration_date))
+        FileOperations.write_to_file(PrivateAd().generate_private_ad(ad_text, ad_expiration_date))
+        # self.file.write_to_file(PrivateAd().generate_private_ad(ad_text, ad_expiration_date))
         pass
 
     def weather_forecast_menu(self):
@@ -83,5 +85,6 @@ class NewsGeneratorMenu:
         if len(location_for_weather) == 0:  # if input value is empty
             location_for_weather = 'Krakow'  # put default value to the variable
         # write generated weather forecast to file
-        self.file.write_to_file(WeatherForecast().generate_weather_forecast(location_for_weather))
+        FileOperations.write_to_file(WeatherForecast().generate_weather_forecast(location_for_weather))
+        # self.file.write_to_file(WeatherForecast().generate_weather_forecast(location_for_weather))
         pass
