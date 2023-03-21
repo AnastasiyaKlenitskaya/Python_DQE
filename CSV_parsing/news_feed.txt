@@ -1,0 +1,30 @@
+News -------------------------
+Somewhere. Yes, just somewhere, 2023-03-21 18:29
+Something happen. Right now we don't understands what exactly. But something absolutely happen
+------------------------------
+
+News -------------------------
+Text from news_to_read.txt
+Krakow, 1-3-2023 19:41
+------------------------------
+
+Private ad -------------------
+Text from news_to_read.txt
+Actual until: 2023-03-08 7 days left
+------------------------------
+
+Weather forecast -------------
+Text from news_to_read.txt
+Temperature is -1, windy.
+------------------------------
+
+News -------------------------
+Text from text.txt
+Krakow, 1-3-2023 19:41
+------------------------------
+
+Private ad -------------------
+Text from text.txt
+Actual until: 2023-03-08 7 days left
+------------------------------
+
