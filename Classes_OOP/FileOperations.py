@@ -10,4 +10,3 @@ class FileOperations:
         else:                                                   # If file is not exist
             with open('news_feed.txt', 'w') as file_to_write:       # Create and open file
                 print(string_to_write_to_file, file=file_to_write)  # print to file given argument
-
