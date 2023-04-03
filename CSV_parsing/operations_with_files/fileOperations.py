@@ -1,7 +1,11 @@
 import os.path
-from config import all_news_file_path, separator
+from config import all_news_file_path, separator, default_file_to_read_news, pattern_text, pattern_city_timestamp, pattern_ad_exp_date
 import re
 from CSVFiles.CSVOperations import CSVOperations
+from data_models.news import News
+from data_models.privateAd import PrivateAd
+from data_models.weatherForecast import WeatherForecast
+from datetime import datetime
 
 
 class FileOperations:
@@ -17,11 +21,15 @@ class FileOperations:
             else:
                 # write normalized string to file with provided path and 'w' parameter
                 FileOperations.write_to_new_or_existed_file(file_path, 'w', normalized_string_to_write)
-            csv_writer = CSVOperations()
+
+            csv_writer = CSVOperations()    # initialize CSVOperations object
+            # create a csv file with words
             csv_writer.create_csv_with_words(FileOperations.get_dict_of_all_words_with_count_from_file())
+            # create a csv file with letters
             csv_writer.create_csv_with_letters(FileOperations.get_dict_of_all_letters_with_count_from_file())
+
         except BaseException as exception:  # exception handler
-            print(exception)    # print exception
+            print("Exception occurs during writing file (FileOperations.write_to_file method)", exception)
 
     # function to write string to file based on provided method
     @staticmethod
@@ -34,24 +42,56 @@ class FileOperations:
     def read_from_file(file_path=all_news_file_path) -> list:
         filtered_records_list = []      # initialization of the empty list to hold records
         if os.path.exists(file_path):   # if file exists
-            with open(file_path, 'r') as file_to_read:  # open file to read
+            with open(file_path, 'r', encoding='utf-8') as file_to_read:  # open file to read       # fix = add encoding
                 text = file_to_read.read()              # read all the file
             records_list = text.split(separator)        # split the string by separator
             for record in records_list:                 # loop threw all records
-                if record != '':                        # if record is not empty
+                if record != '' and record != '\n':                        # if record is not empty
                     record = FileOperations.text_normalizing(record)    # normalize the string
                     filtered_records_list.append(record.lstrip('\n'))   # append record to the list with removing
                     # '\n' from the left side
-        return filtered_records_list                    # return created list
+        return filtered_records_list                    # return created list with records from file
+
+    # function to parse text to object in accordance with data types
+    @staticmethod
+    def parse_list_of_records_to_objects():
+        list_of_records = FileOperations.read_from_file()   # getting list of record in file
+        list_of_object_records = []     # initialization of the empty list of objects
+        for record in list_of_records:      # loop threw all records
+            lines = record.split('\n')      # split record by lines
+            if not len(lines) <= 2:
+                if str(lines[0]).find('News') != -1:    # if record is about news
+                    # if text in record are validated by regular expressions
+                    if re.match(pattern_text, lines[1]) and re.match(pattern_city_timestamp, lines[2]):
+                        # initialize a news object and append to list
+                        list_of_object_records.append(News(lines[1], lines[2]))
+                elif lines[0] == 'Private ad -------------------':   # if record is about private ad
+                    # if text in record are validated by regular expressions
+                    if re.match(pattern_text, lines[1]) and re.match(pattern_ad_exp_date, lines[2]):
+                        # get data in provided format
+                        expiration_date = datetime.strptime(lines[2][14:24], '%Y-%m-%d').date()
+                        # initialize an ad object and append to list as a string
+                        list_of_object_records.append(PrivateAd(lines[1], expiration_date))
+                elif lines[0] == 'Weather forecast -------------':   # if record is about weather forecast
+                    if re.match(pattern_text, lines[1]) and re.match(pattern_text, lines[2]):
+                        # initialize weather forecast object with temp location
+                        forecast = WeatherForecast(lines[1], 'temp')
+                        forecast.location = lines[2]        # correct forecast to existed in file text
+                        # (it's necessary in accordance with weather forecast class constructor)
+                        list_of_object_records.append(forecast)     # append created object as string to list
+        return list_of_object_records       # return list of objects
 
     # function to remove the file
     @staticmethod
-    def delete_file(file_path) -> bool:
-        if os.path.isfile(file_path):       # if file by path exists
-            os.remove(file_path)            # remove file
-            return True
-        else:
-            return False
+    def delete_file(file_path: str):
+        try:
+            if os.path.isfile(file_path):       # if file by path exists
+                os.remove(file_path)            # remove file
+                print('File removed successfully due to no unique records available')
+            else:
+                print('File was not removed, incorrect file path')
+        except FileExistsError:         # if not successfully - print exception
+            print('Error occurs during file removing')
 
     # function to normalize string from previous home task
     @staticmethod
@@ -144,3 +184,45 @@ class FileOperations:
             list_with_lists_of_records.append(sub_list)     # append sub list to the general list
 
         return list_with_lists_of_records           # return list with lists for every letter
+
+    # function to get file path from the console
+    @staticmethod
+    def get_file_path(extension: str):
+        while True:     # infinite loop until correct path entered
+            try:        # error handler
+                # get file path from the console
+                file_path = input("Please define path to the file (press Enter for default value): ")
+                if len(file_path) == 0:         # if nothing was entered
+                    file_path = default_file_to_read_news   # put default value to the variable
+                if not file_path.endswith(extension) or len(file_path) < (len(extension) + 1):  # validation of value entered
+                    print('File should have file name and \'.txt\' extension, please try again')
+                else:
+                    break               # break the loop
+            except ValueError:          # exception handler
+                print('Entered file path is not correct, please try again')
+        return file_path                # return file path as string value
+
+# function to get amount of records to write to file from the console
+    @staticmethod
+    def get_amount_of_records_to_write(available_amount_of_records) -> int:
+        while True:     # infinite loop until correct amount entered
+            try:        # error handler
+                # get value from the console with providing max amount of records to write
+                amount_of_records = input("Please define amount of records to write, available amount is " +
+                                          str(available_amount_of_records) + " (press Enter for default value): ")
+                if len(amount_of_records) == 0:             # if nothing was entered
+                    amount_of_records = available_amount_of_records    # put max value of records to variable
+                if int(amount_of_records) > available_amount_of_records:   # if entered amount is bigger than available
+                    print("Entered amount is bigger than available, please try again: ")
+                else:                                       # else - successful entered amount - break the loop
+                    break
+            except ValueError:                              # except handler
+                print('Entered amount of records is not correct, please try again')
+        return int(amount_of_records)                       # return entered amount as int value
+
+    @staticmethod
+    def is_file_exist(file_path):
+        if os.path.isfile(file_path):
+            return True
+        else:
+            return False

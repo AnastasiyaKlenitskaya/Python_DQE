@@ -13,7 +13,3 @@ text from news_to_read.txt
 Temperature is -1, Windy.
 ------------------------------
 
-
-['News -------------------------\nText from news_to_read.txt\nKrakow, 1-3-2023 19:41\n',
-'Private ad -------------------\nText from news_to_read.txt\nActual until: 2023-03-08 7 days left\n',
-'Weather forecast -------------\nText from news_to_read.txt\nTemperature is -1, windy.\n']

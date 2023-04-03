@@ -1,3 +1,4 @@
+from config import default_file_path_to_json_file
 from operations_with_files.fileOperations import FileOperations
 from operations_with_files.recordsFromFilesHandler import RecordsFromFilesHandler
 from data_models.news import News
@@ -5,6 +6,7 @@ from data_models.weatherForecast import WeatherForecast
 from data_models.privateAd import PrivateAd
 from datetime import datetime
 from datetime import timedelta
+from JSON.jsonManager import JsonManager
 
 
 class NewsGeneratorMenu:
@@ -23,13 +25,16 @@ class NewsGeneratorMenu:
         while True:     # loop until exit
             print("Hi! I can read news from file or generate new one, what would you prefer ?:\n"
                   "\t1. Generate news menu\n"
-                  "\t2. Read news from file\n"
+                  "\t2. Read records from text file\n"
+                  "\t3. Read records from JSON file\n"
                   "\t0. Exit")
             choice = NewsGeneratorMenu.get_input_from_console()     # get input from the console
             if choice.find("generate") != -1 or choice == "1":     # if user select generate
                 self.generate_news_menu()                                   # open menu for generating news
             elif choice.find("read") != -1 or choice == "2":       # if user select read
-                self.read_from_file_menu()                                  # open menu to read news
+                self.read_from_text_file_menu()                                  # open menu to read news
+            elif choice.find("json") != -1 or choice == '3':        # if user select read from JSON file
+                self.read_from_json_file_menu()                         # open menu to read JSON
             elif choice.find("exit") != -1 or choice == "0":       # if user select exit
                 break                                                       # exit from the loop
             else:                                                           # if input was not recognized - try again
@@ -67,7 +72,7 @@ class NewsGeneratorMenu:
                                   "\'ad\' or \'weather\'")
 
     # menu function to define input source for file to read
-    def read_from_file_menu(self):
+    def read_from_text_file_menu(self):
         while True:     # loop until exit
             print("Read from the default file or select another file?:\n"
                   "\t1. Default file\n"
@@ -75,15 +80,32 @@ class NewsGeneratorMenu:
                   "\t0. Back")
             choice = NewsGeneratorMenu.get_input_from_console()            # get input from the console
             if choice.find("default") != -1 or choice == "1":     # if user select default file
-                self.get_news_from_default_file()                          # open default file
+                self.get_records_from_default_file()                          # open default file
             elif choice.find("personal") != -1 or choice == "2":  # if user select personal file
-                self.get_news_from_personal_file()                         # open personal file
+                self.get_records_from_personal_file()                         # open personal file
             elif choice.find("back") != -1 or choice == "0":      # if user select back
                 break                                                      # go to previous menu
             else:                                                          # if input was not recognized - try again
                 print("Incorrect input. Try again to type menu number (1/2/0) or type \'default\', "
                       "\'personal\' or \'back\'")
 
+    # function to select input json file to read
+    def read_from_json_file_menu(self):
+        while True:     # infinite loop until break
+            print("Read from the default file or select another file?:\n"   # print menu
+                  "\t1. Default file\n" 
+                  "\t2. Personal file\n"
+                  "\t0. Back")
+            choice = NewsGeneratorMenu.get_input_from_console()  # get input from the console
+            if choice.find("default") != -1 or choice == "1":   # if user select default file
+                self.get_records_from_default_json_file()       # call the function to write records to default file
+            elif choice.find("personal") != -1 or choice == "2":    # if user select personal file
+                self.get_records_from_personal_json_file()      # call the function to write to personal file
+            elif choice == "back" or choice == "0":         # exit to previous menu
+                break
+            else:                                           # else try again
+                print("Incorrect input. Try again to type menu number (1/2/0) or type \'default\', "
+                      "\'personal\' or \'back\'")
 
     # function to generate news record
     def news_feeds_menu(self):
@@ -115,7 +137,7 @@ class NewsGeneratorMenu:
             else:  # if input is not empty
                 try:  # error handler of incorrect input data
                     # initialization of the expiration date in proper format
-                    ad_expiration_date = datetime.strptime(str(ad_expiration_date), '%d/%m/%Y').date()
+                    ad_expiration_date = datetime.strptime(str(ad_expiration_date), '%Y-%m-%d').date()
                     if ad_expiration_date < datetime.now().date():  # if input date is less than current one
                         print("Entered expiration date is less than current one. Please try again.")  # print to console
                     else:  # if input date is more than current one
@@ -127,7 +149,6 @@ class NewsGeneratorMenu:
         # initialization of the PrivateAd object with advertisement text and expiration date
         ads = PrivateAd(ad_text, ad_expiration_date)
         self.file_to_write.write_to_file(ads.convert_to_string()) # write generated record to the file
-
 
     # function to generate weather forecast
     def weather_forecast_menu(self):
@@ -143,15 +164,33 @@ class NewsGeneratorMenu:
 
     # function to get records from default file
     @staticmethod
-    def get_news_from_default_file():
-        print("You've selected read news from default file")
+    def get_records_from_default_file():
         file_to_read = RecordsFromFilesHandler()      # initialization object of the RecordsFromFilesHandler class
         file_to_read.write_new_records_to_the_file()  # write new records to the file
 
     # function to get records from provided file
     @staticmethod
-    def get_news_from_personal_file():
-        print("You've selected read news from personal file")
+    def get_records_from_personal_file():
         # initialization object of the RecordsFromFilesHandler class with provided path
-        file_to_read = RecordsFromFilesHandler(RecordsFromFilesHandler.get_file_path())
+        file_to_read = RecordsFromFilesHandler(FileOperations.get_file_path('.txt'))
         file_to_read.write_new_records_to_the_file()  # write new records to the file
+
+    # function to write records from default json file
+    @staticmethod
+    def get_records_from_default_json_file():
+        if FileOperations.is_file_exist(default_file_path_to_json_file):
+            json_operations = JsonManager()     # initialization of JsonManager class object
+            json_operations.write_unique_records_to_file()  # function to write unique records, file path = default
+        else:
+            print("Default file doesn't exist")
+
+    # function to write records from json file with providing file path
+    @staticmethod
+    def get_records_from_personal_json_file():
+        file_path = FileOperations.get_file_path('.json')   # defining file path from the console
+        if FileOperations.is_file_exist(file_path):
+            json_operations = JsonManager()  # initialization of JsonManager class object
+            json_operations.file_path = file_path
+            json_operations.write_unique_records_to_file()  # call the function to write records with defined file path
+        else:
+            print("Provided file doesn't exist")

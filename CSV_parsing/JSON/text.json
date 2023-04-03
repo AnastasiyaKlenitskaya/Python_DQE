@@ -1,0 +1,21 @@
+{
+  "News": [{
+    "newsText": "news_text1",
+    "cityTimestamp": "Krakow 2023-03-22 19:41"
+  },
+    {"newsText": "Something happen. Right now we don't understands what exactly. But something absolutely happen",
+    "cityTimestamp": "Somewhere. Yes, just somewhere, 2023-03-22 13:16"
+  },
+    {"newsText": "news_text2",
+    "cityTimestamp": "Krakow 2023-03-22 19:41"
+  }
+],
+  "Private ad": [{
+    "advertisementText": "advertisement",
+    "timestamp": "2023-03-22"
+  }],
+  "Weather forecast": [{
+    "forecastText": "It is a good day",
+    "location": "Weather for krakow: temperature is 18, cloudy"
+  }]
+}
