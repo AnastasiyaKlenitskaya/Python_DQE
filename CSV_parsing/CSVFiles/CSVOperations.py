@@ -1,5 +1,6 @@
 import csv
 from config import default_file_path_to_csv_file
+# from operations_with_files.FileOperations import FileOperations
 
 """Calculate number of words and letters from previous Homeworks 5/6 output test file.
 
@@ -16,9 +17,6 @@ CSVs should be recreated each time new record added.
 
 # class to create csv files
 class CSVOperations:
-    def __init__(self, path=default_file_path_to_csv_file):
-        # initialization of the variable holding path to csv file that will be created
-        self.file_path = path
 
     # function to create csv file with words and count of it's appearance
     @staticmethod

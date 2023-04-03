@@ -26,11 +26,11 @@ class NewsGeneratorMenu:
                   "\t2. Read news from file\n"
                   "\t0. Exit")
             choice = NewsGeneratorMenu.get_input_from_console()     # get input from the console
-            if choice.find("generate") != -1 or choice == "1":     # if user select generate
+            if choice == "generate" or choice == "1":     # if user select generate
                 self.generate_news_menu()                                   # open menu for generating news
-            elif choice.find("read") != -1 or choice == "2":       # if user select read
+            elif choice == "read" or choice == "2":       # if user select read
                 self.read_from_file_menu()                                  # open menu to read news
-            elif choice.find("exit") != -1 or choice == "0":       # if user select exit
+            elif choice == "exit" or choice == "0":       # if user select exit
                 break                                                       # exit from the loop
             else:                                                           # if input was not recognized - try again
                 print("Incorrect input. Try again to type menu number (1/2/0) or type \'generate\', "
@@ -51,19 +51,16 @@ class NewsGeneratorMenu:
                 # FileOperations(add_news_menu())  # write to file generated news feed
                 self.news_feeds_menu()  # Call the function to get news generator menu
                 # if user selected ad, private of menu number
-            else:
-                if choice.find("ad") != -1 or choice.find("private") != -1 or choice == "2":
-                    self.private_ad_menu()  # Call the function to get private ad generator menu
-                else:
+            elif choice == "ad" or choice.find("private") != -1 or choice == "2":
+                self.private_ad_menu()  # Call the function to get private ad generator menu
                     # if user selected weather or menu number
-                    if choice.find("weather") != -1 or choice == "3":
-                        self.weather_forecast_menu()  # Call the function to get weather forecast generator menu
-                    else:
-                        # if user selected exit of menu number
-                        if choice.find("back") != -1 or choice == "0":
-                            break  # exit from the infinite loop
-                        else:  # else print to console that printed text was incorrect
-                            print("Incorrect data type selected. Try again to type menu number (0-3) or type \'news\', "
+            elif choice == "weather" or choice == "3":
+                self.weather_forecast_menu()  # Call the function to get weather forecast generator menu
+                    # if user selected exit of menu number
+            elif choice == "back" or choice == "0":
+                break  # exit from the infinite loop
+            else:  # else print to console that printed text was incorrect
+                print("Incorrect data type selected. Try again to type menu number (0-3) or type \'news\', "
                                   "\'ad\' or \'weather\'")
 
     # menu function to define input source for file to read
@@ -128,7 +125,6 @@ class NewsGeneratorMenu:
         ads = PrivateAd(ad_text, ad_expiration_date)
         self.file_to_write.write_to_file(ads.convert_to_string()) # write generated record to the file
 
-
     # function to generate weather forecast
     def weather_forecast_menu(self):
         weather_details = input('Specify weather details \n')   # input from the console
@@ -144,14 +140,13 @@ class NewsGeneratorMenu:
     # function to get records from default file
     @staticmethod
     def get_news_from_default_file():
-        print("You've selected read news from default file")
         file_to_read = RecordsFromFilesHandler()      # initialization object of the RecordsFromFilesHandler class
         file_to_read.write_new_records_to_the_file()  # write new records to the file
 
     # function to get records from provided file
     @staticmethod
     def get_news_from_personal_file():
-        print("You've selected read news from personal file")
         # initialization object of the RecordsFromFilesHandler class with provided path
         file_to_read = RecordsFromFilesHandler(RecordsFromFilesHandler.get_file_path())
         file_to_read.write_new_records_to_the_file()  # write new records to the file
+

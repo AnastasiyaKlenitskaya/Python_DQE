@@ -41,13 +41,14 @@ class RecordsFromFilesHandler:      # Class to handle reading records from the f
 
     # function to get file path from the console
     @staticmethod
-    def get_file_path():
+    def get_file_path() -> str:
         while True:     # infinite loop until correct path entered
             try:        # error handler
                 # get file path from the console
                 file_path = input("Please define path to the file (press Enter for default value): ")
                 if len(file_path) == 0:         # if nothing was entered
                     file_path = default_file_to_read_news   # put default value to the variable
+                    break   # break the loop
                 if not file_path.endswith('.txt') or len(file_path) < 5:    # validation of value entered
                     print('File should have file name and \'.txt\' extension, please try again')
                 else:

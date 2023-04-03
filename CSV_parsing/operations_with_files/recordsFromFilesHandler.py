@@ -20,46 +20,12 @@ class RecordsFromFilesHandler:      # Class to handle reading records from the f
     def __init__(self, input_file_path=default_file_to_read_news):
         self.input_file_path = input_file_path      # initialization of the self.input_file_path variable
         self.available_amount_of_records = len(self.get_records_without_duplicates())  # initialization of the
-        # available_amount_of_records variable by geting amount of records without duplicates
+        # available_amount_of_records variable by getting amount of records without duplicates
 
-    # function to get amount of records to write to file from the console
-    def get_amount_of_records_to_write(self) -> int:
-        while True:     # infinite loop untill correct amount entered
-            try:        # error handler
-                # get value from the console with providing max amount of records to write
-                amount_of_records = input("Please define amount of records to write, available amount is " +
-                                          str(self.available_amount_of_records) + " (press Enter for default value): ")
-                if len(amount_of_records) == 0:             # if nothign was entered
-                    amount_of_records = self.available_amount_of_records    # put max value of records to variable
-                if int(amount_of_records) > self.available_amount_of_records:   # if entered amount is bigger than available
-                    print("Entered amount is bigger than available, please try again: ")
-                else:                                       # else - successfull entered amount - break the loop
-                    break
-            except ValueError:                              # except handler
-                print('Entered amount of records is not correct, please try again')
-        return int(amount_of_records)                       # return entered amount as int value
-
-    # function to get file path from the console
-    @staticmethod
-    def get_file_path():
-        while True:     # infinite loop untill correct path entered
-            try:        # error handler
-                # get file path from the console
-                file_path = input("Please define path to the file (press Enter for default value): ")
-                if len(file_path) == 0:         # if nothign was entered
-                    file_path = default_file_to_read_news   # put default value to the variable
-                if not file_path.endswith('.txt') or len(file_path) < 5:    # validation of value entered
-                    print('File should have file name and \'.txt\' extension, please try again')
-                else:
-                    break               # break the loop
-            except ValueError:          # exception handler
-                print('Entered file path is not correct, please try again')
-        return file_path                # return file path as string value
-
-    # function to get unique recordings list withour duplicates betweed general file and observed one
+    # function to get unique recordings list without duplicates between general file and observed one
     def get_records_without_duplicates(self) -> list:
         list_of_existed_records = FileOperations.read_from_file()       # get list of records exist in general file
-        list_of_new_records = FileOperations.read_from_file(self.input_file_path)   # get list of recordings exist in provided file
+        list_of_new_records = FileOperations.read_from_file(self.input_file_path)   # get list of recordings exist
         list_of_new_records_without_duplicates = []     # initialization of the empty list to keep unique records
         for record in list_of_new_records:      # go threw all records in provided file
             # check if record contains key-words and not present in existed records list
@@ -70,23 +36,16 @@ class RecordsFromFilesHandler:      # Class to handle reading records from the f
     # function to write records to the file
     def write_new_records_to_the_file(self):
         unique_records = self.get_records_without_duplicates()  # get list of unique records
-        amount_of_records_to_write = self.get_amount_of_records_to_write()  # get amount of records to write from console
+        # get amount of records to write from console
+        amount_of_records_to_write = FileOperations.get_amount_of_records_to_write(self.available_amount_of_records)
         if len(unique_records) != 0 and amount_of_records_to_write != 0:    # if list of unique records is not empty
             string_to_write = ''        # initialization of the empty string to hold string to write to file
             for x in range(amount_of_records_to_write):     # go threw all records to write
                 string_to_write += unique_records[0] + separator + '\n'   # add record to string + separator
-                unique_records.remove(unique_records[0])        # removing added element to add the top element every time
-            string_to_write = string_to_write[:len(string_to_write) - 1]
+                unique_records.remove(unique_records[0])   # removing added element to add the top element every time
+            string_to_write = string_to_write[:len(string_to_write) - 1]    # remove last \n element
             FileOperations.write_to_file(string_to_write)       # write to file created string
-            if amount_of_records_to_write == self.available_amount_of_records:   # if all records was written to the file
-                self.removing_processed_file()      # remove file without unique records
+            if amount_of_records_to_write == self.available_amount_of_records:  # if all records was written to the file
+                FileOperations.delete_file(self.input_file_path)      # remove file without unique records
         else:
             print('No any unique recording available')
-
-    # function to remove the file
-    def removing_processed_file(self):
-        try:        # exception handler
-            FileOperations.delete_file(self.input_file_path)    # delete file by provided path
-            print('File removed successfully due to no unique records available')
-        except FileExistsError:         # if not successfully - print exception
-            print('Error occurs during file removing')
