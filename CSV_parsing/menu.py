@@ -1,12 +1,13 @@
-from config import default_file_path_to_json_file
-from operations_with_files.fileOperations import FileOperations
-from operations_with_files.recordsFromFilesHandler import RecordsFromFilesHandler
+from config import default_file_path_to_json_file, default_file_path_to_xml_file
+from operations_with_files.file_operations import FileOperations
+from operations_with_files.records_from_files_handler import RecordsFromFilesHandler
 from data_models.news import News
-from data_models.weatherForecast import WeatherForecast
-from data_models.privateAd import PrivateAd
+from data_models.weather_forecast import WeatherForecast
+from data_models.private_ad import PrivateAd
 from datetime import datetime
 from datetime import timedelta
 from JSON.jsonManager import JsonManager
+from XML.xmlManager import XMLManager
 
 
 class NewsGeneratorMenu:
@@ -27,6 +28,7 @@ class NewsGeneratorMenu:
                   "\t1. Generate news menu\n"
                   "\t2. Read records from text file\n"
                   "\t3. Read records from JSON file\n"
+                  "\t4. Read records from XML file\n"
                   "\t0. Exit")
             choice = NewsGeneratorMenu.get_input_from_console()     # get input from the console
             if choice.find("generate") != -1 or choice == "1":     # if user select generate
@@ -35,6 +37,8 @@ class NewsGeneratorMenu:
                 self.read_from_text_file_menu()                                  # open menu to read news
             elif choice.find("json") != -1 or choice == '3':        # if user select read from JSON file
                 self.read_from_json_file_menu()                         # open menu to read JSON
+            elif choice.find("xml") != -1 or choice == '4':        # if user select read from JSON file
+                self.read_from_xml_file_menu()                         # open menu to read JSON
             elif choice.find("exit") != -1 or choice == "0":       # if user select exit
                 break                                                       # exit from the loop
             else:                                                           # if input was not recognized - try again
@@ -48,7 +52,7 @@ class NewsGeneratorMenu:
                   "\t1. News\n"  # to generate news
                   "\t2. Private ad\n"  # to generate ad 
                   "\t3. Weather forecast for tomorrow\n"  # to generate weather forecast
-                  "\t0. Back")  # to exip from the loop
+                  "\t0. Back")  # to exit from the loop
 
             choice = NewsGeneratorMenu.get_input_from_console()     # get input from the console
 
@@ -104,6 +108,25 @@ class NewsGeneratorMenu:
             elif choice == "back" or choice == "0":         # exit to previous menu
                 break
             else:                                           # else try again
+                print("Incorrect input. Try again to type menu number (1/2/0) or type \'default\', "
+                      "\'personal\' or \'back\'")
+
+        # function to select input json file to read
+
+    def read_from_xml_file_menu(self):
+        while True:  # infinite loop until break
+            print("Read from the default file or select another file?:\n"  # print menu
+                  "\t1. Default file\n"
+                  "\t2. Personal file\n"
+                  "\t0. Back")
+            choice = NewsGeneratorMenu.get_input_from_console()  # get input from the console
+            if choice.find("default") != -1 or choice == "1":  # if user select default file
+                self.get_records_from_default_xml_file()  # call the function to write records to default file
+            elif choice.find("personal") != -1 or choice == "2":  # if user select personal file
+                self.get_records_from_personal_xml_file()  # call the function to write to personal file
+            elif choice == "back" or choice == "0":  # exit to previous menu
+                break
+            else:  # else try again
                 print("Incorrect input. Try again to type menu number (1/2/0) or type \'default\', "
                       "\'personal\' or \'back\'")
 
@@ -192,5 +215,22 @@ class NewsGeneratorMenu:
             json_operations = JsonManager()  # initialization of JsonManager class object
             json_operations.file_path = file_path
             json_operations.write_unique_records_to_file()  # call the function to write records with defined file path
+        else:
+            print("Provided file doesn't exist")
+
+    @staticmethod
+    def get_records_from_default_xml_file():
+        if FileOperations.is_file_exist(default_file_path_to_xml_file):
+            xml_operations = XMLManager()     # initialization of XMLManager class object
+            xml_operations.write_unique_records_to_file()  # function to write unique records, file path = default
+        else:
+            print("Default file doesn't exist")
+
+    @staticmethod
+    def get_records_from_personal_xml_file():
+        file_path = FileOperations.get_file_path('.xml')  # defining file path from the console
+        if FileOperations.is_file_exist(file_path):
+            xml_operations = XMLManager(file_path)  # initialization of XMLManager class object
+            xml_operations.write_unique_records_to_file()  # call the function to write records with defined file path
         else:
             print("Provided file doesn't exist")

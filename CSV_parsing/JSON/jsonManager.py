@@ -6,13 +6,13 @@
 
 3.Remove file if it was successfully processed - done, checked"""
 
-from operations_with_files.fileOperations import FileOperations
-from config import default_file_path_to_json_file, pattern_text, pattern_city_timestamp
+from CSV_parsing.operations_with_files.file_operations import FileOperations
+from CSV_parsing.config import default_file_path_to_json_file, pattern_text, pattern_city_timestamp
 import json
 import re
-from data_models.news import News
-from data_models.privateAd import PrivateAd
-from data_models.weatherForecast import WeatherForecast
+from CSV_parsing.data_models.news import News
+from CSV_parsing.data_models.private_ad import PrivateAd
+from CSV_parsing.data_models.weather_forecast import WeatherForecast
 from datetime import datetime
 
 
