@@ -10,8 +10,8 @@
 #
 # 4. Apply case normalization functionality from Homework 3/4 - done, checked
 
-from operations_with_files.fileOperations import FileOperations
-from config import separator, default_file_to_read_news
+from CSV_parsing.operations_with_files.file_operations import FileOperations
+from CSV_parsing.config import separator, default_file_to_read_news
 
 
 class RecordsFromFilesHandler:      # Class to handle reading records from the files

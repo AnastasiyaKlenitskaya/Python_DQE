@@ -1,10 +1,10 @@
 import os.path
-from config import all_news_file_path, separator, default_file_to_read_news, pattern_text, pattern_city_timestamp, pattern_ad_exp_date
+from CSV_parsing.config import all_news_file_path, separator, default_file_to_read_news, pattern_text, pattern_city_timestamp, pattern_ad_exp_date
 import re
-from CSVFiles.CSVOperations import CSVOperations
-from data_models.news import News
-from data_models.privateAd import PrivateAd
-from data_models.weatherForecast import WeatherForecast
+from CSV_parsing.CSV_files.CSVOperations import CSVOperations
+from CSV_parsing.data_models.news import News
+from CSV_parsing.data_models.private_ad import PrivateAd
+from CSV_parsing.data_models.weather_forecast import WeatherForecast
 from datetime import datetime
 
 

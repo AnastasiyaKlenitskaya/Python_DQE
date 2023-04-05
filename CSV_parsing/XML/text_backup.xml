@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Records>
+    <Record type = 'News'>
+        <main_text type = 'news_text'>
+            news_text_xml
+        </main_text>
+        <secondary_text type = 'city timestamp'>
+            Krakow 2023-03-22 19:41
+        </secondary_text>
+    </Record>
+    <Record type = 'News'>
+        <main_text type = 'news_text'>
+            News_text1
+        </main_text>
+        <secondary_text type = 'city timestamp'>
+            Krakow 2023-03-22 19:41
+        </secondary_text>
+    </Record>
+    <Record type = 'Private ad'>
+        <main_text type = 'advertisement text'>
+            advertisement from xml
+        </main_text>
+        <secondary_text type = 'timestamp'>
+            2023-03-22
+        </secondary_text>
+    </Record>
+    <Record type = 'Weather forecast'>
+        <main_text type = 'forecast text'>
+            It is a good day
+        </main_text>
+        <secondary_text type = 'location'>
+            Weather for krakow: temperature is 18, cloudy
+        </secondary_text>
+
+    </Record>
+
+
+</Records>

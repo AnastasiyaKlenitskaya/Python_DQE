@@ -1,7 +1,15 @@
-
+Private ad -------------------
+Buy an elephant!1
+Actual until: 2023-03-29, 7 days left
+------------------------------
 
 News -------------------------
-News_text1
+Something happen1. Right now we don't understand what exactly. But something absolutely happen
+Somewhere. Yes, just somewhere, 2023-03-22 13:16
+------------------------------
+
+News -------------------------
+News_text_xml
 Krakow 2023-03-22 19:41
 ------------------------------
 
