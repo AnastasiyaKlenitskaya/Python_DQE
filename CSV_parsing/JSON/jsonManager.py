@@ -39,7 +39,10 @@ class JsonManager:
     @staticmethod
     def parse_json_file_data_to_objs_list(data: dict) -> list:
         list_of_objects = []  # initialization of the empty list to hold list of objects
-        for news_record in data['News']:  # loop threw news items in dict
+        news = data['News'] if type(data['News']) is list else [data['News']]
+        private_ad = data['Private ad'] if type(data['Private ad']) is list else [data['Private ad']]
+        forecast = data['Weather forecast'] if type(data['Weather forecast']) is list else [data['Weather forecast']]
+        for news_record in news:  # loop threw news items in dict
             # if text in record are validated by regular expressions
             if re.match(pattern_text, news_record['newsText']) and re.match(pattern_city_timestamp,
                                                                             news_record['cityTimestamp']):
@@ -47,7 +50,7 @@ class JsonManager:
                 news_object = News(FileOperations.text_normalizing(news_record['newsText']),
                                    FileOperations.text_normalizing(news_record['cityTimestamp']))
                 list_of_objects.append(news_object)  # append initialized object to the list
-        for ad_record in data['Private ad']:  # loop threw private ad items in dict
+        for ad_record in private_ad:  # loop threw private ad items in dict
             try:
                 exp_date = datetime.strptime(ad_record['timestamp'], '%Y-%m-%d').date()
                 ad_text = FileOperations.text_normalizing(ad_record['advertisementText'])
@@ -58,7 +61,7 @@ class JsonManager:
                     list_of_objects.append(private_ad_object)  # append initialized object to the list
             except ValueError as error:
                 print('Wrong data format in provided record during parsing', ad_record, "error: ", error)
-        for forecast_record in data['Weather forecast']:  # loop threw weather forecast items in dict
+        for forecast_record in forecast:  # loop threw weather forecast items in dict
             forecast_text = FileOperations.text_normalizing(forecast_record['forecastText'])
             forecast_location = FileOperations.text_normalizing(forecast_record['location'])
             if re.match(pattern_text, forecast_text) and re.match(pattern_text, forecast_location):
