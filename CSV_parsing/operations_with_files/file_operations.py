@@ -65,14 +65,14 @@ class FileOperations:
                     if re.match(pattern_text, lines[1]) and re.match(pattern_city_timestamp, lines[2]):
                         # initialize a news object and append to list
                         list_of_object_records.append(News(lines[1], lines[2]))
-                elif lines[0] == 'Private ad -------------------':   # if record is about private ad
-                    # if text in record are validated by regular expressions
+                elif str(lines[0]).find('Private ad') != -1:  # if record is about private ad
+                    #  if text in record are validated by regular expressions
                     if re.match(pattern_text, lines[1]) and re.match(pattern_ad_exp_date, lines[2]):
                         # get data in provided format
                         expiration_date = datetime.strptime(lines[2][14:24], '%Y-%m-%d').date()
                         # initialize an ad object and append to list as a string
                         list_of_object_records.append(PrivateAd(lines[1], expiration_date))
-                elif lines[0] == 'Weather forecast -------------':   # if record is about weather forecast
+                elif str(lines[0]).find('Weather forecast') != -1:  # if record is about weather forecast
                     if re.match(pattern_text, lines[1]) and re.match(pattern_text, lines[2]):
                         # initialize weather forecast object with temp location
                         forecast = WeatherForecast(lines[1], 'temp')
@@ -119,11 +119,11 @@ class FileOperations:
         dict_of_words = {}       # initialization of empty dict to hold words, and it's count of appearance
         separated_list_of_words = []     # initialization of empty list to hold words
         for record in filtered_records_list:       # loop threw list of records
-            separated_list_of_words.append(re.split(r"\W+", record))    # separating record by words
+            separated_list_of_words.append(re.findall(r"[\w'-]+", record.lower()))   # separating record by words
         for list_of_words in separated_list_of_words:   # loop threw list of words
             for word in list_of_words:      # loop threw list of the words
                 word = word.lower()         # converting to lowercase current word
-                if word.isalpha():          # if current item is a word
+                if word.isalpha() or word.find('\'') != -1:    # if current item is a word
                     if word in dict_of_words:   # if word already present in the dict
                         dict_of_words[word] += 1    # increase counter
                     else:                   # if not present
