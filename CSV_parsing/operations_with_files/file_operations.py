@@ -1,7 +1,8 @@
 import os.path
-from CSV_parsing.config import all_news_file_path, separator, default_file_to_read_news, pattern_text, pattern_city_timestamp, pattern_ad_exp_date
+
+from CSV_parsing.config import  all_news_file_path, separator, default_file_to_read_news, pattern_text, pattern_city_timestamp, pattern_ad_exp_date
 import re
-from CSV_parsing.CSV_files.CSVOperations import CSVOperations
+from CSV_parsing.CSV_files.СSVOperations import CSVOperations
 from CSV_parsing.data_models.news import News
 from CSV_parsing.data_models.private_ad import PrivateAd
 from CSV_parsing.data_models.weather_forecast import WeatherForecast
@@ -54,8 +55,8 @@ class FileOperations:
 
     # function to parse text to object in accordance with data types
     @staticmethod
-    def parse_list_of_records_to_objects():
-        list_of_records = FileOperations.read_from_file()   # getting list of record in file
+    def parse_list_of_records_to_objects(list_of_records):
+        # list_of_records = FileOperations.read_from_file()   # getting list of record in file
         list_of_object_records = []     # initialization of the empty list of objects
         for record in list_of_records:      # loop threw all records
             lines = record.split('\n')      # split record by lines
@@ -65,14 +66,14 @@ class FileOperations:
                     if re.match(pattern_text, lines[1]) and re.match(pattern_city_timestamp, lines[2]):
                         # initialize a news object and append to list
                         list_of_object_records.append(News(lines[1], lines[2]))
-                elif str(lines[0]).find('Private ad') != -1:  # if record is about private ad
-                    #  if text in record are validated by regular expressions
+                elif str(lines[0]).find('Private ad') != -1:   # if record is about private ad
+                    # if text in record are validated by regular expressions
                     if re.match(pattern_text, lines[1]) and re.match(pattern_ad_exp_date, lines[2]):
                         # get data in provided format
                         expiration_date = datetime.strptime(lines[2][14:24], '%Y-%m-%d').date()
                         # initialize an ad object and append to list as a string
                         list_of_object_records.append(PrivateAd(lines[1], expiration_date))
-                elif str(lines[0]).find('Weather forecast') != -1:  # if record is about weather forecast
+                elif str(lines[0]).find('Weather forecast') != -1:   # if record is about weather forecast
                     if re.match(pattern_text, lines[1]) and re.match(pattern_text, lines[2]):
                         # initialize weather forecast object with temp location
                         forecast = WeatherForecast(lines[1], 'temp')
@@ -119,11 +120,11 @@ class FileOperations:
         dict_of_words = {}       # initialization of empty dict to hold words, and it's count of appearance
         separated_list_of_words = []     # initialization of empty list to hold words
         for record in filtered_records_list:       # loop threw list of records
-            separated_list_of_words.append(re.findall(r"[\w'-]+", record.lower()))   # separating record by words
+            separated_list_of_words.append(re.findall(r"[\w'-]+", record.lower()))     # separating record by words
         for list_of_words in separated_list_of_words:   # loop threw list of words
             for word in list_of_words:      # loop threw list of the words
-                word = word.lower()         # converting to lowercase current word
-                if word.isalpha() or word.find('\'') != -1:    # if current item is a word
+                # word = word.lower()      # converting to lowercase current word
+                if word.isalpha() or word.find('\'') != -1:          # if current item is a word
                     if word in dict_of_words:   # if word already present in the dict
                         dict_of_words[word] += 1    # increase counter
                     else:                   # if not present

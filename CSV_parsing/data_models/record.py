@@ -1,5 +1,4 @@
-from config import separator, title_length
-
+from CSV_parsing.config import separator,title_length
 
 # general class for all records
 class Record:

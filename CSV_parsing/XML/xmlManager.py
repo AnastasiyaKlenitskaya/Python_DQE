@@ -7,6 +7,8 @@ from CSV_parsing.data_models.private_ad import PrivateAd
 from CSV_parsing.data_models.weather_forecast import WeatherForecast
 from datetime import datetime
 import re
+from CSV_parsing.sql import SQLManager
+
 
 """Expand previous Homework 5/6/7/8 with additional class, which allow to provide records by XML file:
 
@@ -67,7 +69,7 @@ class XMLManager:
     # function to get list of unique objects by comparing existed and objects from file data
     def get_list_of_unique_object_from_xml(self):
         list_of_unique_objects = []  # initialize list to hold unique objects
-        list_of_existed_objects = FileOperations.parse_list_of_records_to_objects()  # get list of existed objects
+        list_of_existed_objects = FileOperations.parse_list_of_records_to_objects(FileOperations.read_from_file())  # get list of existed objects
         for new_object in self.list_of_object_records:  # loop threw list of object from file
             flag = False        # initialization of the flag
             for existed_object in list_of_existed_objects:  # loop threw list of existed objects
@@ -79,12 +81,14 @@ class XMLManager:
 
     # function to write unique objects to the file
     def write_unique_records_to_file(self):
+        db = SQLManager()       # initialize db object
         # get amount of records to write
         amount_objs_to_write = FileOperations.get_amount_of_records_to_write(self.available_amount_of_record_to_write)
         string_to_write = ''  # initialization of an empty string
         # if available amount to write != 0 and selected amount to write != 0
         if self.available_amount_of_record_to_write != 0 and amount_objs_to_write != 0:
             for iteration in range(amount_objs_to_write):  # loop to fill in string by objects
+                db.write_obj_to_db(self.unique_objects[0])   # write object to db
                 string_to_write += self.unique_objects[0].convert_to_string() + '\n'  # fill in string variable
                 self.unique_objects.remove(self.unique_objects[0])  # remove obj from list to avoid duplicated
             # write created string to file
@@ -95,3 +99,5 @@ class XMLManager:
             FileOperations.delete_file(self.file_path)  # remove file
         else:  # else
             print('No any unique recording available')  # print that no unique objects available
+        db.cursor.close()               # close db cursor
+        db.connection.close()           # close  db connection

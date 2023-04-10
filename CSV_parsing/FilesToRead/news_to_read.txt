@@ -1,15 +1,15 @@
 News -------------------------
-text from news_to_read.txt
-Krakow, 1-3-2023 19:41
+Something happen in news to read 1
+Krakow, 2023-03-22 19:41
 ------------------------------
 
 Private Ad -------------------
-text from news_to_read.txt
+text from news to read
 Actual until: 2023-03-08 7 days left
 ------------------------------
 
 Weather forecast -------------
-text from news_to_read.txt
+text from news to read
 Temperature is -1, Windy.
 ------------------------------
 

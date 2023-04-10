@@ -1,5 +1,5 @@
 from random import randint
-from data_models.record import Record
+from CSV_parsing.data_models.record import Record
 
 
 # class inherits Record class and initialize a WeatherForecast object with record text
@@ -12,6 +12,6 @@ class WeatherForecast(Record):
         self.title = Record.generate_header('Weather Forecast ')    # generate tite
         super().__init__(self.title, text)   # super class constructor call
         # generate location text
-        self.location = 'Weather for ' + location + ': Temperature is ' \
+        self.location = 'Weather for ' + location + ': temperature is ' \
                         + str(randint(-20, + 35)) + ', ' \
                         + self.list_of_possible_weathers[randint(0, len(self.list_of_possible_weathers) - 1)]

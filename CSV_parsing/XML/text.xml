@@ -5,7 +5,7 @@
             news_text_xml
         </main_text>
         <secondary_text type = 'city timestamp'>
-            Krakow 2023-03-22 19:41
+            Krakow, 2023-03-22 19:41
         </secondary_text>
     </Record>
     <Record type = 'News'>
@@ -13,7 +13,7 @@
             News_text1
         </main_text>
         <secondary_text type = 'city timestamp'>
-            Krakow 2023-03-22 19:41
+            Krakow, 2023-03-22 19:41
         </secondary_text>
     </Record>
     <Record type = 'Private ad'>
