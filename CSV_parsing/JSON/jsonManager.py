@@ -14,6 +14,7 @@ from CSV_parsing.data_models.news import News
 from CSV_parsing.data_models.private_ad import PrivateAd
 from CSV_parsing.data_models.weather_forecast import WeatherForecast
 from datetime import datetime
+from CSV_parsing.sql import SQLManager
 
 
 class JsonManager:
@@ -72,7 +73,7 @@ class JsonManager:
 
     # function to get list of unique object by comparative existed objects and new once
     def get_list_of_unique_objects(self):
-        list_of_existed_objects = FileOperations.parse_list_of_records_to_objects()  # get list of existed objects
+        list_of_existed_objects = FileOperations.parse_list_of_records_to_objects(FileOperations.read_from_file())  # get list of existed objects
         list_of_unique_objects = []  # initialize list to hold unique objects
         for new_object in self.list_of_records:  # loop threw new list of records (objects)
             flag = False  # flat to find unique objects
@@ -86,6 +87,7 @@ class JsonManager:
 
     # function to write unique records to the file
     def write_unique_records_to_file(self):
+        db = SQLManager()
         # get amount of objects to write to file
         # self.unique_objects = self.get_list_of_unique_objects()
         amount_objs_to_write = FileOperations.get_amount_of_records_to_write(self.available_amount_of_record_to_write)
@@ -93,6 +95,7 @@ class JsonManager:
         # if records to write are available and amount of objects to write by user is not = 0
         if self.available_amount_of_record_to_write != 0 and amount_objs_to_write != 0:
             for iteration in range(amount_objs_to_write):  # loop to fill in string by objects
+                db.write_obj_to_db(self.unique_objects[0])
                 string_to_write += self.unique_objects[0].convert_to_string() + '\n'  # fill in string variable
                 self.unique_objects.remove(self.unique_objects[0])  # remove obj from list to avoid duplicated
             # write created string to file
@@ -103,3 +106,5 @@ class JsonManager:
             FileOperations.delete_file(self.file_path)  # remove file
         else:  # else
             print('No any unique recording available')  # print that no unique objects available
+        db.cursor.close()
+        db.connection.close()

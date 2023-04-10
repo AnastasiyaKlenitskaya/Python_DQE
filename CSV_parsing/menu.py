@@ -1,19 +1,20 @@
-from config import default_file_path_to_json_file, default_file_path_to_xml_file
-from operations_with_files.file_operations import FileOperations
-from operations_with_files.records_from_files_handler import RecordsFromFilesHandler
-from data_models.news import News
-from data_models.weather_forecast import WeatherForecast
-from data_models.private_ad import PrivateAd
+from CSV_parsing.config import default_file_path_to_json_file, default_file_path_to_xml_file
+from CSV_parsing.operations_with_files.file_operations import FileOperations
+from CSV_parsing.operations_with_files.records_from_files_handler import RecordsFromFilesHandler
+from CSV_parsing.data_models.news import News
+from CSV_parsing.data_models.weather_forecast import WeatherForecast
+from CSV_parsing.data_models.private_ad import PrivateAd
+from CSV_parsing.JSON.jsonManager import JsonManager
+from CSV_parsing.XML.xmlManager import XMLManager
+from CSV_parsing.sql import SQLManager
 from datetime import datetime
 from datetime import timedelta
-from JSON.jsonManager import JsonManager
-from XML.xmlManager import XMLManager
-
 
 class NewsGeneratorMenu:
 
     def __init__(self):
         self.file_to_write = FileOperations()  # initialization of local variable with object of FileOperations class
+        self.db = SQLManager()      # initialize db object
 
     # Function to get info from console input
     @staticmethod
@@ -44,6 +45,8 @@ class NewsGeneratorMenu:
             else:                                                           # if input was not recognized - try again
                 print("Incorrect input. Try again to type menu number (1/2/0) or type \'generate\', "
                       "\'read\' or \'exit\'")
+        self.db.cursor.close()              # close db cursor
+        self.db.connection.close()          # close db connection
 
     # function with general menu
     def generate_news_menu(self):
@@ -135,14 +138,15 @@ class NewsGeneratorMenu:
         news_body = input("What's happen? \n")  # input from the console text of the news feed
         if len(news_body) == 0:  # put input was empty
             # print default text for news feed
-            news_body = "Something happen. Right now we don't understands what exactly. But something absolutely happen"
+            news_body = "Something happen"
         news_city_timestamp = input("Where something happen? \n")  # input from the console city of the news
         if len(news_city_timestamp) == 0:  # if input was empty
-            news_city_timestamp = "Somewhere. Yes, just somewhere"  # put default value as a city
+            news_city_timestamp = "Somewhere"  # put default value as a city
         # adding timestamp string city timestamp
         news_city_timestamp += datetime.now().strftime(", %Y-%m-%d %H:%M")
         # initialization of the News object with provided text, city and timestamp
         news = News(news_body, news_city_timestamp)
+        self.db.write_obj_to_db(news)            # write object to db
         # write generated news object to file
         self.file_to_write.write_to_file(news.convert_to_string())
 
@@ -153,7 +157,7 @@ class NewsGeneratorMenu:
             ad_text = 'Buy an elephant!'  # put default value to the variable
         while True:  # infinite loop to get correct expiration date
             # input the date from the console
-            ad_expiration_date = input("What is an expiration date of this advertisement? ( in dd/mm/yyyy format) \n")
+            ad_expiration_date = input("What is an expiration date of this advertisement? ( in yyyy-mm-dd format) \n")
             if len(ad_expiration_date) == 0:  # if input is empty
                 ad_expiration_date = datetime.now().date() + timedelta(days=7)  # put the default value
                 break       # break the loop
@@ -171,7 +175,8 @@ class NewsGeneratorMenu:
         # self.file_to_write.write_to_file(PrivateAd().generate_private_ad(ad_text, ad_expiration_date))
         # initialization of the PrivateAd object with advertisement text and expiration date
         ads = PrivateAd(ad_text, ad_expiration_date)
-        self.file_to_write.write_to_file(ads.convert_to_string()) # write generated record to the file
+        self.db.write_obj_to_db(ads)               # write object to db
+        self.file_to_write.write_to_file(ads.convert_to_string())  # write generated record to the file
 
     # function to generate weather forecast
     def weather_forecast_menu(self):
@@ -183,6 +188,7 @@ class NewsGeneratorMenu:
             location_for_weather = 'Krakow'  # put default value to the variable
         # initialization of the WeatherForecast object with weather text and city
         weather = WeatherForecast(weather_details, location_for_weather)
+        self.db.write_obj_to_db(weather)         # write object to db
         self.file_to_write.write_to_file(weather.convert_to_string())  # write generated weather forecast to file
 
     # function to get records from default file

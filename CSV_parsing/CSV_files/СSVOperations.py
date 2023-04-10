@@ -1,5 +1,6 @@
 import csv
-from config import default_file_path_to_csv_file
+from CSV_parsing.config import default_file_path_to_csv_file
+
 # from operations_with_files.FileOperations import FileOperations
 
 """Calculate number of words and letters from previous Homeworks 5/6 output test file.

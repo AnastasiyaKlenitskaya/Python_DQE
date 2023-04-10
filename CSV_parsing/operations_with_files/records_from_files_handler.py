@@ -12,6 +12,7 @@
 
 from CSV_parsing.operations_with_files.file_operations import FileOperations
 from CSV_parsing.config import separator, default_file_to_read_news
+from CSV_parsing.sql import SQLManager
 
 
 class RecordsFromFilesHandler:      # Class to handle reading records from the files
@@ -35,12 +36,19 @@ class RecordsFromFilesHandler:      # Class to handle reading records from the f
 
     # function to write records to the file
     def write_new_records_to_the_file(self):
+        db = SQLManager()   # initialize db object
         unique_records = self.get_records_without_duplicates()  # get list of unique records
+        # list_of_objects = []
         # get amount of records to write from console
         amount_of_records_to_write = FileOperations.get_amount_of_records_to_write(self.available_amount_of_records)
         if len(unique_records) != 0 and amount_of_records_to_write != 0:    # if list of unique records is not empty
             string_to_write = ''        # initialization of the empty string to hold string to write to file
             for x in range(amount_of_records_to_write):     # go threw all records to write
+                # write object to db
+                obj_to_write = FileOperations.parse_list_of_records_to_objects([unique_records[0]])
+                if len(obj_to_write) != 0:
+                    db.write_obj_to_db(obj_to_write[0])
+                # list_of_objects.append(FileOperations.parse_list_of_records_to_objects([unique_records[0]]))
                 string_to_write += unique_records[0] + separator + '\n'   # add record to string + separator
                 unique_records.remove(unique_records[0])   # removing added element to add the top element every time
             string_to_write = string_to_write[:len(string_to_write) - 1]    # remove last \n element
@@ -49,3 +57,5 @@ class RecordsFromFilesHandler:      # Class to handle reading records from the f
                 FileOperations.delete_file(self.input_file_path)      # remove file without unique records
         else:
             print('No any unique recording available')
+        db.cursor.close()       # close db cursor
+        db.connection.close()   # close db connection

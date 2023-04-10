@@ -1,5 +1,5 @@
-from config import title_length
-from data_models.record import Record
+from CSV_parsing.config import title_length
+from CSV_parsing.data_models.record import Record
 
 
 # class inherits Record class and initialize a News object with record text

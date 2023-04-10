@@ -1,5 +1,5 @@
 from datetime import datetime
-from data_models.record import Record
+from CSV_parsing.data_models.record import Record
 
 # class inherits Record class and initialize a PrivateAd object with record text
 class PrivateAd(Record):

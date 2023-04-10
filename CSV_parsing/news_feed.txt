@@ -1,11 +1,21 @@
+News -------------------------
+Something happen
+Somewhere, 2023-04-10 11:32
+------------------------------
+
 Private ad -------------------
-Buy an elephant!1
-Actual until: 2023-03-29, 7 days left
+Buy an elephant!
+Actual until: 2023-04-17, 7 days left
+------------------------------
+
+Weather forecast -------------
+It would be a great day!
+Weather for krakow: temperature is 17, hail
 ------------------------------
 
 News -------------------------
-Something happen1. Right now we don't understand what exactly. But something absolutely happen
-Somewhere. Yes, just somewhere, 2023-03-22 13:16
+News_text1
+Krakow 2023-03-22 19:41
 ------------------------------
 
 News -------------------------
@@ -13,8 +23,23 @@ News_text_xml
 Krakow 2023-03-22 19:41
 ------------------------------
 
+Private ad -------------------
+Advertisement from xml
+Actual until: 2023-03-22, -19 days left
+------------------------------
+
 News -------------------------
-News_text1
-Krakow 2023-03-22 19:41
+Something happen in news to read
+Krakow, 1-3-2023 19:41
+------------------------------
+
+News -------------------------
+Something happen in news to read
+Krakow, 2023-03-22 19:41
+------------------------------
+
+News -------------------------
+Something happen in news to read 1
+Krakow, 2023-03-22 19:41
 ------------------------------
 
